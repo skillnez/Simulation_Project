@@ -1,11 +1,13 @@
 package Entities;
 
+import Sprites.EntitySprite;
+
 public abstract class Predator extends Creature {
 
     private final int attackPower;
 
-    public Predator(int healthPoints, int speed, int attackPower) {
-        super(healthPoints, speed);
+    public Predator(int healthPoints, int speed, int attackPower, EntitySprite sprite) {
+        super(healthPoints, speed, sprite);
         this.attackPower = attackPower;
     }
 
@@ -16,5 +18,9 @@ public abstract class Predator extends Creature {
 
     public void attack(Herbivore herbivore) {
 
+    }
+
+    public int getAttackPower() {
+        return attackPower;
     }
 }

@@ -1,7 +1,6 @@
+import Entities.Wolf;
+import Sprites.EntitySprite;
 
 public class Simulation {
 
-    public static void main(String[] args) {
-
-    }
 }
