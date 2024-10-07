@@ -4,6 +4,6 @@ import Sprites.EntitySprite;
 
 public class Grass {
 
-    public Grass(EntitySprite sprite) {
+    public Grass() {
     }
 }
