@@ -6,12 +6,10 @@ public abstract class Creature extends Entity {
 
     private final int healthPoints;
     private final int speed;
-    private final EntitySprite sprite;
 
-    public Creature(int healthPoints, int speed, EntitySprite sprite) {
+    public Creature(int healthPoints, int speed) {
         this.healthPoints = healthPoints;
         this.speed = speed;
-        this.sprite = sprite;
     }
 
     public abstract void makeMove();
@@ -24,12 +22,4 @@ public abstract class Creature extends Entity {
         return speed;
     }
 
-    public EntitySprite getSprite() {
-        return sprite;
-    }
-
-    @Override
-    public String toString() {
-        return sprite.toString();
-    }
 }

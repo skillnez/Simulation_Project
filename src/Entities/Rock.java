@@ -4,6 +4,6 @@ import Sprites.EntitySprite;
 
 public class Rock {
 
-    public Rock (EntitySprite sprite) {
+    public Rock () {
     }
 }
