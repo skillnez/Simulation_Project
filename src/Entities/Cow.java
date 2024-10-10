@@ -1,4 +1,8 @@
 package Entities;
 
-public class Cow {
+public class Cow extends Herbivore {
+
+    public Cow(int healthPoints, int speed) {
+        super(healthPoints, speed);
+    }
 }

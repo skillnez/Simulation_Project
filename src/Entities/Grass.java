@@ -1,8 +1,6 @@
 package Entities;
 
-import Sprites.EntitySprite;
-
-public class Grass {
+public class Grass extends Entity {
 
     public Grass() {
     }

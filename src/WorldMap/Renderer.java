@@ -20,13 +20,13 @@ public class Renderer {
 
     private void renderEntitySprite(WorldMap worldMap, Coordinates coordinates) {
         if (worldMap.getFlatMap().containsKey(coordinates)) {
-            System.out.print(setEntitySprite(worldMap.getFlatMap().get(coordinates)));
+            System.out.print(ChoseEntitySprite(worldMap.getFlatMap().get(coordinates)));
         } else {
             System.out.print(EntitySprite.GROUND);
         }
     }
 
-    private String setEntitySprite(Entity entity) {
+    private String ChoseEntitySprite(Entity entity) {
         return switch (entity.getClass().getSimpleName()) {
             case "Wolf" -> EntitySprite.WOLF.toString();
             case "Hare" -> EntitySprite.HARE.toString();

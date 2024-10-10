@@ -1,8 +1,6 @@
 package Entities;
 
-import Sprites.EntitySprite;
-
-public class Tree {
+public class Tree extends Entity {
 
     public Tree() {
     }

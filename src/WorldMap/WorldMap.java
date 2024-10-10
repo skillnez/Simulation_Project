@@ -9,12 +9,14 @@ public class WorldMap {
 
     private final int horizontalMapSize;
     private final int verticalMapSize;
+    private final int totalMapSize;
     private final Set<Coordinates> availableCoordinates = new HashSet<>();
     private final Map<Coordinates, Entity> flatMap = new HashMap<>();
 
     public WorldMap(int horizontalMapSize, int verticalMapSize) {
         this.horizontalMapSize = horizontalMapSize;
         this.verticalMapSize = verticalMapSize;
+        this.totalMapSize = horizontalMapSize * verticalMapSize;
     }
 
     public void setAvailableCells() {
@@ -53,5 +55,9 @@ public class WorldMap {
 
     public Map<Coordinates, Entity> getFlatMap() {
         return flatMap;
+    }
+
+    public int getTotalMapSize() {
+        return totalMapSize;
     }
 }
