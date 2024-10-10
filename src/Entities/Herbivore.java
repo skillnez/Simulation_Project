@@ -7,11 +7,11 @@ public abstract class Herbivore extends Creature {
     }
 
     @Override
-    public void makeMove(){
+    public void makeMove() {
         //двигается чтобы найти траву
     }
 
-    private void consumeGrass(){
+    private void consumeGrass() {
 
     }
 

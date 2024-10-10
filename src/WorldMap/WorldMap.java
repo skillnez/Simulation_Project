@@ -1,7 +1,6 @@
 package WorldMap;
 
 import Entities.Entity;
-import Entities.Wolf;
 
 import java.util.*;
 
@@ -29,16 +28,16 @@ public class WorldMap {
 
     public Coordinates getRandomAvailableCell() {
         if (availableCoordinates.isEmpty()) {
-            System.out.println("Программа не может быть запущена:" +
-                    "\nНет свободных ячеек, карта переполнена или отсутствует");
+            System.out.println("Программа не может быть запущена:" + "\nНет свободных ячеек, карта переполнена или отсутствует");
             System.exit(0);
         }
-            Random random = new Random();
-            int index = random.nextInt(availableCoordinates.size());
-            Iterator<Coordinates> iterator = availableCoordinates.iterator();
-            for (int i = 0; i < index; i++) {
-                iterator.next();
-            } return iterator.next();
+        Random random = new Random();
+        int index = random.nextInt(availableCoordinates.size());
+        Iterator<Coordinates> iterator = availableCoordinates.iterator();
+        for (int i = 0; i < index; i++) {
+            iterator.next();
+        }
+        return iterator.next();
     }
 
     protected int getHorizontalMapSize() {

@@ -1,7 +1,5 @@
 package Entities;
 
-import Sprites.EntitySprite;
-
 public abstract class Creature extends Entity {
 
     private final int healthPoints;

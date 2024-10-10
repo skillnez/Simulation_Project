@@ -10,7 +10,7 @@ public abstract class Predator extends Creature {
     }
 
     @Override
-    public void makeMove(){
+    public void makeMove() {
         //чтобы попасть к травоядному
     }
 
