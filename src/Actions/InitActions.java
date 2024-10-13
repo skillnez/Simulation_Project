@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 public class InitActions {
 
-    private void placeEntity(Coordinates coordinates, Entity entity, WorldMap worldMap) {
+    public void placeEntity(Coordinates coordinates, Entity entity, WorldMap worldMap) {
         worldMap.getFlatMap().put(coordinates, entity);
         worldMap.getAvailableCoordinates().remove(coordinates);
     }
@@ -19,6 +19,15 @@ public class InitActions {
         worldMap.setAvailableCells();
         EntityConfig entityConfig = new EntityConfig();
         entityConfig.setCreaturesQuantity(worldMap);
+        Map<Class<? extends Entity>, Integer> entityToSpawn = fillEntityMap(entityConfig);
+        for (Map.Entry<Class<? extends Entity>, Integer> entry : entityToSpawn.entrySet()) {
+            Class<? extends Entity> entityClass = entry.getKey();
+            int quantity = entry.getValue();
+            spawnEntities(worldMap, entityClass, quantity);
+        }
+    }
+
+    private Map<Class<? extends Entity>, Integer> fillEntityMap(EntityConfig entityConfig) {
         Map<Class<? extends Entity>, Integer> entityToSpawn = new HashMap<>();
         entityToSpawn.put(Wolf.class, entityConfig.getWolfQty());
         entityToSpawn.put(Fox.class, entityConfig.getFoxQty());
@@ -27,22 +36,17 @@ public class InitActions {
         entityToSpawn.put(Grass.class, entityConfig.getGrassQty());
         entityToSpawn.put(Rock.class, entityConfig.getRockQty());
         entityToSpawn.put(Tree.class, entityConfig.getTreeQty());
-
-        for (Map.Entry<Class<? extends Entity>, Integer> entry : entityToSpawn.entrySet()) {
-            Class<? extends Entity> entityClass = entry.getKey();
-            int quantity = entry.getValue();
-            spawnEntities(worldMap, entityClass, quantity);
-        }
+        return entityToSpawn;
     }
 
-    private void spawnEntities(WorldMap worldMap, Class<? extends Entity>  entityClass, int quantity) {
+    private void spawnEntities(WorldMap worldMap, Class<? extends Entity> entityClass, int quantity) {
         for (int i = 0; i < quantity; i++) {
-                Entity entity = createEntity(entityClass);
-                placeEntity(worldMap.getRandomAvailableCell(), entity, worldMap);
+            Entity entity = createEntity(entityClass);
+            placeEntity(worldMap.getRandomAvailableCell(), entity, worldMap);
         }
     }
 
-    private Entity createEntity (Class<? extends Entity> entities) {
+    private Entity createEntity(Class<? extends Entity> entities) {
         return switch (entities.getSimpleName()) {
             case "Wolf" -> new Wolf(EntityConfig.WOLF_HP, EntityConfig.WOLF_SPEED, EntityConfig.WOLF_DAMAGE);
             case "Fox" -> new Fox(EntityConfig.FOX_HP, EntityConfig.FOX_SPEED, EntityConfig.FOX_DAMAGE);

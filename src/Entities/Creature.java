@@ -1,6 +1,6 @@
 package Entities;
 
-public abstract class Creature extends Entity {
+public abstract class Creature extends Entity implements Movable{
 
     private final int healthPoints;
     private final int speed;

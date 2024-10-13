@@ -1,6 +1,6 @@
 package Entities;
 
-public abstract class Predator extends Creature {
+public abstract class Predator extends Creature implements Movable {
 
     private final int attackPower;
 

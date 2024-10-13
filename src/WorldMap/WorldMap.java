@@ -11,11 +11,18 @@ public class WorldMap {
     private final int totalMapSize;
     private final Set<Coordinates> availableCoordinates = new HashSet<>();
     private final Map<Coordinates, Entity> flatMap = new HashMap<>();
+    public static final int MIN_MAP_SIZE = 20;
 
     public WorldMap(int horizontalMapSize, int verticalMapSize) {
         this.horizontalMapSize = horizontalMapSize;
         this.verticalMapSize = verticalMapSize;
         this.totalMapSize = horizontalMapSize * verticalMapSize;
+        if (totalMapSize < MIN_MAP_SIZE) {
+            System.out.println("""
+                    Карта слишком мала, минимальный размер - 20 клеток\s
+                    Но ты все еще можешь насладиться пустой картой ;)\s
+                    """);
+        }
     }
 
     public void setAvailableCells() {
@@ -28,7 +35,8 @@ public class WorldMap {
 
     public Coordinates getRandomAvailableCell() {
         if (availableCoordinates.isEmpty()) {
-            System.out.println("Программа не может быть запущена:" + "\nНет свободных ячеек, карта переполнена или отсутствует");
+            System.out.println("Программа не может быть запущена:" +
+                    "\nНет свободных ячеек, карта переполнена или отсутствует");
             System.exit(0);
         }
         Random random = new Random();
@@ -40,11 +48,11 @@ public class WorldMap {
         return iterator.next();
     }
 
-    protected int getHorizontalMapSize() {
+    public int getHorizontalMapSize() {
         return horizontalMapSize;
     }
 
-    protected int getVerticalMapSize() {
+    public int getVerticalMapSize() {
         return verticalMapSize;
     }
 

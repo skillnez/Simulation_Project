@@ -5,16 +5,18 @@ import Sprites.EntitySprite;
 
 public class Renderer {
 
-    //Попытки сильнее разделить этот метод приводили к кратному усложнению понимания кода,
-    //поэтому я не нашел пока необходимости это сделать
+//    Попытки сильнее разделить этот метод приводили к кратному усложнению понимания кода,
+//    поэтому я не нашел пока необходимости это сделать
+
     public void render(WorldMap worldMap) {
         for (int vertical = 0; vertical < worldMap.getVerticalMapSize(); vertical++) {
             for (int horizontal = 0; horizontal < worldMap.getHorizontalMapSize(); horizontal++) {
                 Coordinates coordinates = new Coordinates(horizontal, vertical);
-                System.out.print(" "); // нужно для увеличения интервала между ячейками карты
+                System.out.print("\033[48;5;57m"+" ");// нужно для увеличения интервала между ячейками карты
                 renderEntitySprite(worldMap, coordinates);
             }
-            System.out.println(); // нужно для переноса строки
+            String reset = "\u001B[0m";
+            System.out.println(reset); // нужно для переноса строки
         }
     }
 
