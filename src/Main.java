@@ -17,6 +17,7 @@ public class Main {
 
         PathFinder pathFinder = new PathFinder();
         pathFinder.bfs(worldMap);
+        renderer.render(worldMap);
 
 
         int i = 123;

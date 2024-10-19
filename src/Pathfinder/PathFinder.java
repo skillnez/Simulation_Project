@@ -1,5 +1,4 @@
 package Pathfinder;
-
 import Entities.Creature;
 import Entities.Entity;
 import Entities.Herbivore;
@@ -8,15 +7,11 @@ import Entities.StaticObjects.Grass;
 import Entities.StaticObjects.ZAGLUSHKA;
 import WorldMap.Coordinates;
 import WorldMap.WorldMap;
-
 import java.util.*;
-
 public class PathFinder {
-
     Coordinates start;
     Coordinates goal;
     Entity entity = new ZAGLUSHKA();
-
     public List<Coordinates> bfs(WorldMap worldMap) {
         Map<Coordinates, Entity> cacheMap = worldMap.getFlatMap();
         Queue<Coordinates> queue = new LinkedList<>();
@@ -47,8 +42,6 @@ public class PathFinder {
         int i = 123;
         return Collections.emptyList();
     }
-
-
     private List<Coordinates> reconstructPath(Map<Coordinates, Coordinates> parent, Coordinates start, Coordinates goal, WorldMap worldMap, Entity entity) {
         List<Coordinates> path = new ArrayList<>();
         for (Coordinates at = goal; at != null; at = parent.get(at)) {
@@ -58,11 +51,10 @@ public class PathFinder {
         path.remove(start);
         path.remove(goal);
         for (Coordinates at : path) {
-            worldMap.getFlatMap().replace(at, entity);
+            worldMap.getFlatMap().put(at, entity);
         }
         return path;
     }
-
     //это хорошо работает, протестировано
     public void getNeighbors(Queue<Coordinates> queue, Coordinates coordinates, WorldMap worldMap, Set<Coordinates> visited, Map<Coordinates, Coordinates> parent) {
         int[] verticalDirection = {-1, 1, 0, 0};
@@ -78,7 +70,6 @@ public class PathFinder {
             }
         }
     }
-
     private boolean isInBounds(WorldMap worldMap, Coordinates inWatch) {
         return inWatch.getVertical() < worldMap.getVerticalMapSize() &&
                 inWatch.getHorizontal() < worldMap.getHorizontalMapSize() &&
@@ -86,12 +77,10 @@ public class PathFinder {
                 inWatch.getHorizontal() >= 0;
         // работает, но пока идет сквозь животных
     }
-
     private boolean isVisited(Set<Coordinates> visited, Coordinates coordinates) {
         return visited.contains(coordinates);
     }
 }
-
 //Пока на всякий оставлю проверку границ
 //             if (horizontal < 0 || vertical < 0) {
 //                continue;
