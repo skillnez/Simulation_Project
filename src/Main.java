@@ -8,7 +8,7 @@ import WorldMap.WorldMap;
 public class Main {
     public static void main(String[] args) {
 
-        WorldMap worldMap = new WorldMap(5, 5);
+        WorldMap worldMap = new WorldMap(7, 4);
         InitActions initActions = new InitActions();
         Renderer renderer = new Renderer();
         initActions.mapSetup(worldMap);

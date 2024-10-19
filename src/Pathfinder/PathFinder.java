@@ -1,19 +1,23 @@
 package Pathfinder;
+
 import Entities.*;
 import Entities.StaticObjects.ZAGLUSHKA;
 import WorldMap.Coordinates;
 import WorldMap.WorldMap;
+
 import java.util.*;
+
 public class PathFinder {
     Coordinates start;
     Coordinates goal;
     Entity entity = new ZAGLUSHKA();
+    List<Coordinates> path = new ArrayList<>();
+    List<Coordinates> coordinatesBuffer = new ArrayList<>();
+    Set<Coordinates> visited = new HashSet<>();
+    Map<Coordinates, Coordinates> parent = new HashMap<>();
 
     public List<Coordinates> bfs(WorldMap worldMap) {
-        Map<Coordinates, Entity> cacheMap = worldMap.getFlatMap();
         Queue<Coordinates> queue = new LinkedList<>();
-        Set<Coordinates> visited = new HashSet<>();
-        Map<Coordinates, Coordinates> parent = new HashMap<>();
         for (Map.Entry<Coordinates, Entity> entry : worldMap.getFlatMap().entrySet()) {
             if (entry.getValue() instanceof Creature) {
                 start = entry.getKey();
@@ -24,62 +28,60 @@ public class PathFinder {
         parent.put(start, null);
         while (!queue.isEmpty()) {
             Coordinates current = queue.poll();
-            if (cacheMap.get(current) instanceof Herbivore && cacheMap.get(start) instanceof Predator) {
+            if (isGoal(worldMap, current)) {
                 goal = current;
-                List<Coordinates> path = reconstructPath(parent, start, goal, worldMap, entity);
-                return reconstructPath(parent, start, goal, worldMap, entity);
+                return reconstructPath(worldMap);
             }
-            if (cacheMap.get(current) instanceof Consumable && cacheMap.get(start) instanceof Herbivore) {
-                goal = current;
-                List<Coordinates> path = reconstructPath(parent, start, goal, worldMap, entity);
-                return reconstructPath(parent, start, goal, worldMap, entity);
-            }
-            getNeighbors(queue, current, worldMap, visited, parent);
+            getNeighbors(queue, current, worldMap);
         }
-        int i = 123;
         return Collections.emptyList();
     }
 
-    private List<Coordinates> reconstructPath(Map<Coordinates, Coordinates> parent, Coordinates start, Coordinates goal, WorldMap worldMap, Entity entity) {
-        List<Coordinates> path = new ArrayList<>();
+    private List<Coordinates> reconstructPath(WorldMap worldMap) {
         for (Coordinates at = goal; at != null; at = parent.get(at)) {
             path.add(at);
         }
         Collections.reverse(path);
-        path.remove(start);
+        //возможно придется убрать, когда буду делать взаимодействия животных
+        path.removeFirst();
         path.remove(goal);
         //добавлено для отладки пути
-        for (Coordinates at : path) {
-            worldMap.getFlatMap().put(at, entity);
-        }
+        pathDebugVisual(worldMap);
         //
         return path;
     }
 
-    //это хорошо работает, протестировано
-    public void getNeighbors(Queue<Coordinates> queue, Coordinates coordinates, WorldMap worldMap, Set<Coordinates> visited, Map<Coordinates, Coordinates> parent) {
+    public void pathDebugVisual(WorldMap worldMap) {
+        for (Coordinates at : path) {
+            worldMap.getFlatMap().put(at, entity);
+        }
+    }
+
+    public void getNeighbors(Queue<Coordinates> queue, Coordinates current, WorldMap worldMap) {
         int[] verticalDirection = {-1, 1, 0, 0};
         int[] horizontalDirection = {0, 0, 1, -1};
         for (int i = 0; i < 4; i++) {
-            int horizontal = coordinates.getHorizontal() + horizontalDirection[i];
-            int vertical = coordinates.getVertical() + verticalDirection[i];
-            Coordinates inWatch = new Coordinates(horizontal, vertical);
-            if (isInBounds(worldMap, inWatch) && !visited.contains(inWatch)) {
-                if (!isCellOccupied(worldMap, inWatch) || isGoal(worldMap, inWatch)) {
-                    parent.put(inWatch, coordinates);
-                    queue.add(inWatch);
-                    visited.add(inWatch);
-                }
+            int horizontal = current.getHorizontal() + horizontalDirection[i];
+            int vertical = current.getVertical() + verticalDirection[i];
+            coordinatesBuffer.add(new Coordinates(horizontal, vertical));
+            Coordinates inWatch = coordinatesBuffer.getLast();
+            if (isNeighborValid(inWatch, worldMap)) {
+                parent.put(inWatch, current);
+                queue.add(inWatch);
+                visited.add(inWatch);
             }
         }
     }
 
+    private boolean isNeighborValid(Coordinates inWatch, WorldMap worldMap) {
+        if (isInBounds(worldMap, inWatch) && !visited.contains(inWatch)) {
+            return !isCellOccupied(worldMap, inWatch) || isGoal(worldMap, inWatch);
+        }
+        return false;
+    }
+
     private boolean isInBounds(WorldMap worldMap, Coordinates inWatch) {
-        return inWatch.getVertical() < worldMap.getVerticalMapSize() &&
-                inWatch.getHorizontal() < worldMap.getHorizontalMapSize() &&
-                inWatch.getVertical() >= 0 &&
-                inWatch.getHorizontal() >= 0;
-        // работает, но пока идет сквозь животных
+        return inWatch.getVertical() < worldMap.getVerticalMapSize() && inWatch.getHorizontal() < worldMap.getHorizontalMapSize() && inWatch.getVertical() >= 0 && inWatch.getHorizontal() >= 0;
     }
 
     private boolean isCellOccupied(WorldMap worldMap, Coordinates inWatch) {
@@ -89,14 +91,6 @@ public class PathFinder {
 
     private boolean isGoal(WorldMap worldMap, Coordinates inWatch) {
         Map<Coordinates, Entity> cacheMap = worldMap.getFlatMap();
-        return (cacheMap.get(inWatch) instanceof Herbivore && cacheMap.get(start) instanceof Predator) ||
-                (cacheMap.get(inWatch) instanceof Consumable && cacheMap.get(start) instanceof Herbivore);
+        return (cacheMap.get(start) instanceof Predator && cacheMap.get(inWatch) instanceof Herbivore) || (cacheMap.get(start) instanceof Herbivore && cacheMap.get(inWatch) instanceof Consumable);
     }
 }
-//Пока на всякий оставлю проверку границ
-//             if (horizontal < 0 || vertical < 0) {
-//                continue;
-//            }
-//            if (horizontal >= worldMap.getHorizontalMapSize() || vertical >= worldMap.getVerticalMapSize()) {
-//                continue;
-//            }
