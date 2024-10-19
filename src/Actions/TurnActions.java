@@ -1,5 +1,6 @@
 package Actions;
 
+import Entities.Creature;
 import Entities.Entity;
 import WorldMap.WorldMap;
 import WorldMap.Coordinates;
@@ -16,10 +17,9 @@ public class TurnActions {
         Iterator<Map.Entry<Coordinates, Entity>> iterator = wordMap.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<Coordinates, Entity> entry = iterator.next();
-
-            if (isAbleToMove(worldMap, coordinateMove(entry.getKey()), entry.getValue())) {
-                Coordinates coordinates = coordinateMove(entry.getKey());
-                moveCache.put(coordinates, entry.getValue());
+            Coordinates coordinateToMove = coordinateMove(entry.getKey(), 1, 0);
+            if (isAbleToMove(worldMap, coordinateToMove, entry.getValue())) {
+                moveCache.put(coordinateToMove, entry.getValue());
             } else {
                 moveCache.put(entry.getKey(), entry.getValue());
             }
@@ -28,19 +28,19 @@ public class TurnActions {
         worldMap.getFlatMap().putAll(moveCache);
     }
 
-    private Coordinates coordinateMove(Coordinates coordinates) {
-        Coordinates newCoordinates = new Coordinates(coordinates.getHorizontal(), coordinates.getVertical()+1);
-        return newCoordinates;
+    private Coordinates coordinateMove(Coordinates coordinates, int verticalMove, int horizontalMove) {
+        return new Coordinates(coordinates.getHorizontal()+horizontalMove,
+                coordinates.getVertical() + verticalMove);
     }
 
-    private boolean isAbleToMove(WorldMap worldMap, Coordinates coordinates, Entity entity) {
-        return entity.isAbleToMove() &&
+
+    //Перенести в BFS потом!!!
+    public boolean isAbleToMove(WorldMap worldMap, Coordinates coordinates, Entity entity) {
+        return entity instanceof Creature &&
                 coordinates.getVertical() < worldMap.getVerticalMapSize() &&
                 coordinates.getHorizontal() < worldMap.getHorizontalMapSize() &&
                 coordinates.getVertical() >= 0 &&
                 coordinates.getHorizontal() >= 0 &&
                 !worldMap.getFlatMap().containsKey(coordinates);
-
-
     }
 }

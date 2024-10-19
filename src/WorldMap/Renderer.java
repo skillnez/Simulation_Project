@@ -37,6 +37,7 @@ public class Renderer {
             case "Tree" -> EntitySprite.TREE.toString();
             case "Rock" -> EntitySprite.ROCK.toString();
             case "Grass" -> EntitySprite.GRASS.toString();
+            case "ZAGLUSHKA" -> EntitySprite.ZAGLUSHKA.toString();
             default -> EntitySprite.GROUND.toString();
         };
     }

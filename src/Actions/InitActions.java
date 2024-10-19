@@ -1,6 +1,13 @@
 package Actions;
 
 import Entities.*;
+import Entities.Herbivores.Cow;
+import Entities.Herbivores.Hare;
+import Entities.Predators.Fox;
+import Entities.Predators.Wolf;
+import Entities.StaticObjects.Grass;
+import Entities.StaticObjects.Rock;
+import Entities.StaticObjects.Tree;
 import WorldMap.Coordinates;
 import WorldMap.WorldMap;
 

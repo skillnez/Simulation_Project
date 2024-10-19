@@ -1,4 +1,6 @@
-package Entities;
+package Entities.Predators;
+
+import Entities.Predator;
 
 public class Fox extends Predator {
 
@@ -6,8 +8,4 @@ public class Fox extends Predator {
         super(healthPoints, speed, attackPower);
     }
 
-    @Override
-    public boolean isAbleToMove() {
-        return true;
-    }
 }
