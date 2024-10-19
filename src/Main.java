@@ -11,12 +11,13 @@ public class Main {
         WorldMap worldMap = new WorldMap(7, 4);
         InitActions initActions = new InitActions();
         Renderer renderer = new Renderer();
+        TurnActions turnActions = new TurnActions();
         initActions.mapSetup(worldMap);
         renderer.render(worldMap);
         System.out.println();
-
         PathFinder pathFinder = new PathFinder();
-        pathFinder.bfs(worldMap);
+        pathFinder.findPath(worldMap);
+
         renderer.render(worldMap);
 
 

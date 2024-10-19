@@ -16,23 +16,23 @@ public class PathFinder {
     Set<Coordinates> visited = new HashSet<>();
     Map<Coordinates, Coordinates> parent = new HashMap<>();
 
-    public List<Coordinates> bfs(WorldMap worldMap) {
-        Queue<Coordinates> queue = new LinkedList<>();
+    public List<Coordinates> findPath(WorldMap worldMap) {
+        Queue<Coordinates> processingCells = new LinkedList<>();
         for (Map.Entry<Coordinates, Entity> entry : worldMap.getFlatMap().entrySet()) {
             if (entry.getValue() instanceof Creature) {
                 start = entry.getKey();
             }
         }
-        queue.add(start);
+        processingCells.add(start);
         visited.add(start);
         parent.put(start, null);
-        while (!queue.isEmpty()) {
-            Coordinates current = queue.poll();
+        while (!processingCells.isEmpty()) {
+            Coordinates current = processingCells.poll();
             if (isGoal(worldMap, current)) {
                 goal = current;
                 return reconstructPath(worldMap);
             }
-            getNeighbors(queue, current, worldMap);
+            getNeighbors(processingCells, current, worldMap);
         }
         return Collections.emptyList();
     }
