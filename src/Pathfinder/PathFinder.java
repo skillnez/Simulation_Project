@@ -8,7 +8,6 @@ import WorldMap.WorldMap;
 import java.util.*;
 
 public class PathFinder {
-    Coordinates start;
     Coordinates goal;
     Entity entity = new ZAGLUSHKA();
     List<Coordinates> path = new ArrayList<>();
@@ -16,25 +15,29 @@ public class PathFinder {
     Set<Coordinates> visited = new HashSet<>();
     Map<Coordinates, Coordinates> parent = new HashMap<>();
 
-    public List<Coordinates> findPath(WorldMap worldMap) {
+    public List<Coordinates> findPath(WorldMap worldMap, Coordinates start) {
+        clearAllConditions();
+
         Queue<Coordinates> processingCells = new LinkedList<>();
-        for (Map.Entry<Coordinates, Entity> entry : worldMap.getFlatMap().entrySet()) {
-            if (entry.getValue() instanceof Creature) {
-                start = entry.getKey();
-            }
-        }
         processingCells.add(start);
         visited.add(start);
         parent.put(start, null);
         while (!processingCells.isEmpty()) {
             Coordinates current = processingCells.poll();
-            if (isGoal(worldMap, current)) {
+            if (isGoal(worldMap, current, start)) {
                 goal = current;
                 return reconstructPath(worldMap);
             }
-            getNeighbors(processingCells, current, worldMap);
+            getNeighbors(processingCells, current, worldMap, start);
         }
         return Collections.emptyList();
+    }
+
+    private void clearAllConditions () {
+        goal = null;
+        path.clear();
+        visited.clear();
+        parent.clear();
     }
 
     private List<Coordinates> reconstructPath(WorldMap worldMap) {
@@ -44,9 +47,9 @@ public class PathFinder {
         Collections.reverse(path);
         //возможно придется убрать, когда буду делать взаимодействия животных
         path.removeFirst();
-        path.remove(goal);
+        //path.removeLast();
         //добавлено для отладки пути
-        pathDebugVisual(worldMap);
+        //pathDebugVisual(worldMap);
         //
         return path;
     }
@@ -57,7 +60,8 @@ public class PathFinder {
         }
     }
 
-    public void getNeighbors(Queue<Coordinates> queue, Coordinates current, WorldMap worldMap) {
+    public void getNeighbors(Queue<Coordinates> queue, Coordinates current, WorldMap worldMap, Coordinates start) {
+        coordinatesBuffer.clear();
         int[] verticalDirection = {-1, 1, 0, 0};
         int[] horizontalDirection = {0, 0, 1, -1};
         for (int i = 0; i < 4; i++) {
@@ -65,7 +69,7 @@ public class PathFinder {
             int vertical = current.getVertical() + verticalDirection[i];
             coordinatesBuffer.add(new Coordinates(horizontal, vertical));
             Coordinates inWatch = coordinatesBuffer.getLast();
-            if (isNeighborValid(inWatch, worldMap)) {
+            if (isNeighborValid(inWatch, worldMap, start)) {
                 parent.put(inWatch, current);
                 queue.add(inWatch);
                 visited.add(inWatch);
@@ -73,15 +77,15 @@ public class PathFinder {
         }
     }
 
-    private boolean isNeighborValid(Coordinates inWatch, WorldMap worldMap) {
-        if (isInBounds(worldMap, inWatch) && !visited.contains(inWatch)) {
-            return !isCellOccupied(worldMap, inWatch) || isGoal(worldMap, inWatch);
-        }
-        return false;
+    private boolean isNeighborValid(Coordinates inWatch, WorldMap worldMap, Coordinates start) {
+        return isInBounds(worldMap, inWatch) &&
+                !visited.contains(inWatch) &&
+                (!isCellOccupied(worldMap, inWatch) || isGoal(worldMap, inWatch, start));
     }
 
     private boolean isInBounds(WorldMap worldMap, Coordinates inWatch) {
-        return inWatch.getVertical() < worldMap.getVerticalMapSize() && inWatch.getHorizontal() < worldMap.getHorizontalMapSize() && inWatch.getVertical() >= 0 && inWatch.getHorizontal() >= 0;
+        return inWatch.getVertical() < worldMap.getVerticalMapSize() && inWatch.getHorizontal() <
+                worldMap.getHorizontalMapSize() && inWatch.getVertical() >= 0 && inWatch.getHorizontal() >= 0;
     }
 
     private boolean isCellOccupied(WorldMap worldMap, Coordinates inWatch) {
@@ -89,8 +93,9 @@ public class PathFinder {
         return cacheMap.get(inWatch) != null;
     }
 
-    private boolean isGoal(WorldMap worldMap, Coordinates inWatch) {
+    private boolean isGoal(WorldMap worldMap, Coordinates inWatch, Coordinates start) {
         Map<Coordinates, Entity> cacheMap = worldMap.getFlatMap();
-        return (cacheMap.get(start) instanceof Predator && cacheMap.get(inWatch) instanceof Herbivore) || (cacheMap.get(start) instanceof Herbivore && cacheMap.get(inWatch) instanceof Consumable);
+        return (cacheMap.get(start) instanceof Predator && cacheMap.get(inWatch) instanceof Herbivore)
+                || (cacheMap.get(start) instanceof Herbivore && cacheMap.get(inWatch) instanceof Consumable);
     }
 }

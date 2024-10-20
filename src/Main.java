@@ -15,10 +15,12 @@ public class Main {
         initActions.mapSetup(worldMap);
         renderer.render(worldMap);
         System.out.println();
-        PathFinder pathFinder = new PathFinder();
-        pathFinder.findPath(worldMap);
 
-        renderer.render(worldMap);
+        for (int i = 0; i < 7; i++) {
+            turnActions.moveEntities(worldMap);
+            renderer.render(worldMap);
+            System.out.println();
+        }
 
 
         int i = 123;

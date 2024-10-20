@@ -12,7 +12,7 @@ public class Renderer {
         for (int vertical = 0; vertical < worldMap.getVerticalMapSize(); vertical++) {
             for (int horizontal = 0; horizontal < worldMap.getHorizontalMapSize(); horizontal++) {
                 Coordinates coordinates = new Coordinates(horizontal, vertical);
-                System.out.print("\033[48;5;57m"+" ");// нужно для увеличения интервала между ячейками карты
+                System.out.print("\033[32m"+" ");// нужно для увеличения интервала между ячейками карты
                 renderEntitySprite(worldMap, coordinates);
             }
             String reset = "\u001B[0m";
