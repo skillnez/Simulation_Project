@@ -2,7 +2,7 @@ package Entities;
 
 public abstract class Creature extends Entity{
 
-    private final int healthPoints;
+    private int healthPoints;
     private final int speed;
 
     public Creature(int healthPoints, int speed) {
@@ -20,4 +20,7 @@ public abstract class Creature extends Entity{
         return speed;
     }
 
+    public void setHealthPoints(int healthPoints) {
+        this.healthPoints = healthPoints;
+    }
 }

@@ -15,13 +15,11 @@ public class Main {
         initActions.mapSetup(worldMap);
         renderer.render(worldMap);
         System.out.println();
-
         for (int i = 0; i < 7; i++) {
-            turnActions.moveEntities(worldMap);
+            turnActions.moveEntities2(worldMap);
             renderer.render(worldMap);
             System.out.println();
         }
-
 
         int i = 123;
     }

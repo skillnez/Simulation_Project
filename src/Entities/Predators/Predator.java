@@ -1,4 +1,7 @@
-package Entities;
+package Entities.Predators;
+
+import Entities.Creature;
+import Entities.Herbivores.Herbivore;
 
 public abstract class Predator extends Creature {
 
@@ -14,9 +17,7 @@ public abstract class Predator extends Creature {
         //чтобы попасть к травоядному
     }
 
-    public void attack(Herbivore herbivore) {
-
-    }
+    public abstract void attack(Herbivore herbivore);
 
     public int getAttackPower() {
         return attackPower;

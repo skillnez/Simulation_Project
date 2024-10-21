@@ -1,8 +1,11 @@
 package WorldMap;
 
 import Entities.Entity;
+import Entities.Herbivores.Herbivore;
+import Entities.Predators.Predator;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WorldMap {
 
@@ -10,7 +13,7 @@ public class WorldMap {
     private final int verticalMapSize;
     private final int totalMapSize;
     private final Set<Coordinates> availableCoordinates = new HashSet<>();
-    private final Map<Coordinates, Entity> flatMap = new HashMap<>();
+    private final ConcurrentHashMap<Coordinates, Entity> flatMap = new ConcurrentHashMap<>();
     public static final int MIN_MAP_SIZE = 20;
 
     public WorldMap(int horizontalMapSize, int verticalMapSize) {
@@ -48,6 +51,26 @@ public class WorldMap {
         return iterator.next();
     }
 
+    public Set<Coordinates> getPredators () {
+        Set<Coordinates> predators = new HashSet<>();
+        for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
+            if (entry instanceof Predator) {
+                predators.add(entry.getKey());
+            }
+        }
+        return predators;
+    }
+
+    public Set<Coordinates> getHerbivores () {
+        Set<Coordinates> herbivores = new HashSet<>();
+        for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
+            if (entry instanceof Herbivore) {
+                herbivores.add(entry.getKey());
+            }
+        }
+        return herbivores;
+    }
+
     public int getHorizontalMapSize() {
         return horizontalMapSize;
     }
@@ -60,7 +83,7 @@ public class WorldMap {
         return availableCoordinates;
     }
 
-    public Map<Coordinates, Entity> getFlatMap() {
+    public ConcurrentHashMap<Coordinates, Entity> getFlatMap() {
         return flatMap;
     }
 

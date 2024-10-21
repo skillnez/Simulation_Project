@@ -2,8 +2,8 @@ package Actions;
 
 import Entities.Creature;
 import Entities.Entity;
-import Entities.Herbivore;
-import Entities.Predator;
+import Entities.Herbivores.Herbivore;
+import Entities.Predators.Predator;
 import Pathfinder.PathFinder;
 import WorldMap.Coordinates;
 import WorldMap.WorldMap;
@@ -11,6 +11,51 @@ import WorldMap.WorldMap;
 import java.util.*;
 
 public class TurnActions {
+
+    private Set<Coordinates> predators;
+    private Set<Coordinates> herbivores;
+
+    public void moveEntities2 (WorldMap worldMap) {
+        //есть баг, существа ходят больше чем надо, потому что в процессе итерирования попадаются 2 раза
+        //из-за изменений карты.
+        //баг устранен
+        Set<Entity> proceededEntities = new HashSet<>();
+        for (Map.Entry<Coordinates, Entity> entry : worldMap.getFlatMap().entrySet()) {
+            if (entry.getValue() instanceof Predator) {
+                List<Coordinates> predatorPath = new PathFinder().findPath(worldMap, entry.getKey());
+                if (!proceededEntities.contains(entry.getValue())) {
+                    if (predatorPath.size() > 1) {
+                        worldMap.getFlatMap().put(predatorPath.getFirst(), entry.getValue());
+                        worldMap.getFlatMap().remove(entry.getKey());
+                    }
+                    if (predatorPath.size() == 1) {
+                        //типа аттакует (удаляет свою крайнюю точку пути(цель) и становится на ее место)
+                        worldMap.getFlatMap().remove(predatorPath.getLast());
+                        worldMap.getFlatMap().put(predatorPath.getLast(), entry.getValue());
+                        worldMap.getFlatMap().remove(entry.getKey());
+                    }
+                }
+                proceededEntities.add(entry.getValue());
+            }
+            if (entry.getValue() instanceof Herbivore) {
+                List<Coordinates> herbivorePath = new PathFinder().findPath(worldMap, entry.getKey());
+                if (!proceededEntities.contains(entry.getValue())) {
+                    if (herbivorePath.size() > 1) {
+                        worldMap.getFlatMap().put(herbivorePath.getFirst(), entry.getValue());
+                        worldMap.getFlatMap().remove(entry.getKey());
+                    }
+                    if (herbivorePath.size() == 1) {
+                        //типа аттакует (удаляет свою крайнюю точку пути(цель) и становится на ее место)
+                        worldMap.getFlatMap().remove(herbivorePath.getLast());
+                        worldMap.getFlatMap().put(herbivorePath.getLast(), entry.getValue());
+                        worldMap.getFlatMap().remove(entry.getKey());
+                    }
+                }
+                proceededEntities.add(entry.getValue());
+            }
+        }
+    }
+
     //есть баг, что существа наступают друг на друга
     public void moveEntities(WorldMap worldMap) {
         Map<Coordinates, Entity> cacheMap = worldMap.getFlatMap();
@@ -21,6 +66,7 @@ public class TurnActions {
         for (Map.Entry<Coordinates, Entity> entry : cacheMap.entrySet()) {
             if (entry.getValue() instanceof Creature) {
                 List<Coordinates> movePath = new PathFinder().findPath(worldMap, entry.getKey());
+                int i = 123;
                 if (!movePath.isEmpty()) {
                     Coordinates newCoordinate = movePath.get(0);
                     Entity newCellEntity = cacheMap.get(newCoordinate);

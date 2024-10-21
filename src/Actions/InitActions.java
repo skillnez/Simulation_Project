@@ -55,10 +55,10 @@ public class InitActions {
 
     private Entity createEntity(Class<? extends Entity> entities) {
         return switch (entities.getSimpleName()) {
-            case "Wolf" -> new Wolf(EntityConfig.WOLF_HP, EntityConfig.WOLF_SPEED, EntityConfig.WOLF_DAMAGE);
-            case "Fox" -> new Fox(EntityConfig.FOX_HP, EntityConfig.FOX_SPEED, EntityConfig.FOX_DAMAGE);
             case "Hare" -> new Hare(EntityConfig.HARE_HP, EntityConfig.HARE_SPEED);
             case "Cow" -> new Cow(EntityConfig.COW_HP, EntityConfig.COW_SPEED);
+            case "Wolf" -> new Wolf(EntityConfig.WOLF_HP, EntityConfig.WOLF_SPEED, EntityConfig.WOLF_DAMAGE);
+            case "Fox" -> new Fox(EntityConfig.FOX_HP, EntityConfig.FOX_SPEED, EntityConfig.FOX_DAMAGE);
             case "Rock" -> new Rock();
             case "Grass" -> new Grass();
             case "Tree" -> new Tree();

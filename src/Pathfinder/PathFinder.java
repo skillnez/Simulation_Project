@@ -1,6 +1,8 @@
 package Pathfinder;
 
 import Entities.*;
+import Entities.Herbivores.Herbivore;
+import Entities.Predators.Predator;
 import Entities.StaticObjects.ZAGLUSHKA;
 import WorldMap.Coordinates;
 import WorldMap.WorldMap;
@@ -78,8 +80,7 @@ public class PathFinder {
     }
 
     private boolean isNeighborValid(Coordinates inWatch, WorldMap worldMap, Coordinates start) {
-        return isInBounds(worldMap, inWatch) &&
-                !visited.contains(inWatch) &&
+        return isInBounds(worldMap, inWatch) && !visited.contains(inWatch) &&
                 (!isCellOccupied(worldMap, inWatch) || isGoal(worldMap, inWatch, start));
     }
 

@@ -1,4 +1,6 @@
-package Entities;
+package Entities.Herbivores;
+
+import Entities.Creature;
 
 public abstract class Herbivore extends Creature {
 
