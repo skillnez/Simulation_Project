@@ -1,5 +1,6 @@
 package Entities.Herbivores;
 
+import Entities.Consumable;
 import Entities.Creature;
 
 public abstract class Herbivore extends Creature {
@@ -8,13 +9,13 @@ public abstract class Herbivore extends Creature {
         super(healthPoints, speed);
     }
 
-    @Override
-    public void makeMove() {
-        //двигается чтобы найти траву
-    }
-
-    private void consumeGrass() {
-
+    public void consume(Consumable consumable){
+        int damageTaken = getMaxHealthPoints() - this.getHealthPoints();
+        if (consumable.getStateEffect() < damageTaken) {
+            this.setHealthPoints(this.getHealthPoints() + consumable.getStateEffect());
+        } else {
+            this.setHealthPoints(getMaxHealthPoints());
+        }
     }
 
 }

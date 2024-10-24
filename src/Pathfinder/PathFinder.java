@@ -3,7 +3,6 @@ package Pathfinder;
 import Entities.*;
 import Entities.Herbivores.Herbivore;
 import Entities.Predators.Predator;
-import Entities.StaticObjects.ZAGLUSHKA;
 import WorldMap.Coordinates;
 import WorldMap.WorldMap;
 
@@ -11,7 +10,6 @@ import java.util.*;
 
 public class PathFinder {
     Coordinates goal;
-    Entity entity = new ZAGLUSHKA();
     List<Coordinates> path = new ArrayList<>();
     List<Coordinates> coordinatesBuffer = new ArrayList<>();
     Set<Coordinates> visited = new HashSet<>();
@@ -47,19 +45,8 @@ public class PathFinder {
             path.add(at);
         }
         Collections.reverse(path);
-        //возможно придется убрать, когда буду делать взаимодействия животных
         path.removeFirst();
-        //path.removeLast();
-        //добавлено для отладки пути
-        //pathDebugVisual(worldMap);
-        //
         return path;
-    }
-
-    public void pathDebugVisual(WorldMap worldMap) {
-        for (Coordinates at : path) {
-            worldMap.getFlatMap().put(at, entity);
-        }
     }
 
     public void getNeighbors(Queue<Coordinates> queue, Coordinates current, WorldMap worldMap, Coordinates start) {
@@ -90,13 +77,13 @@ public class PathFinder {
     }
 
     private boolean isCellOccupied(WorldMap worldMap, Coordinates inWatch) {
-        Map<Coordinates, Entity> cacheMap = worldMap.getFlatMap();
-        return cacheMap.get(inWatch) != null;
+        return worldMap.getEntityByCoordinate(inWatch) != null;
     }
 
     private boolean isGoal(WorldMap worldMap, Coordinates inWatch, Coordinates start) {
-        Map<Coordinates, Entity> cacheMap = worldMap.getFlatMap();
-        return (cacheMap.get(start) instanceof Predator && cacheMap.get(inWatch) instanceof Herbivore)
-                || (cacheMap.get(start) instanceof Herbivore && cacheMap.get(inWatch) instanceof Consumable);
+        Entity target = worldMap.getEntityByCoordinate(inWatch);
+        Entity seeker = worldMap.getEntityByCoordinate(start);
+        return (seeker instanceof Predator && target instanceof Herbivore)
+                || (seeker instanceof Herbivore && target instanceof Consumable);
     }
 }

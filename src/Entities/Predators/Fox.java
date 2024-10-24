@@ -13,4 +13,8 @@ public class Fox extends Predator {
         herbivore.setHealthPoints(herbivore.getHealthPoints() - this.getAttackPower());
     }
 
+    @Override
+    public String toString() {
+        return "Лиса";
+    }
 }

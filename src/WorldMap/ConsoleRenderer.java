@@ -3,7 +3,7 @@ package WorldMap;
 import Entities.Entity;
 import Sprites.EntitySprite;
 
-public class Renderer {
+public class ConsoleRenderer {
 
 //    Попытки сильнее разделить этот метод приводили к кратному усложнению понимания кода,
 //    поэтому я не нашел пока необходимости это сделать

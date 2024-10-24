@@ -18,6 +18,8 @@ public class EntityConfig {
     public final static int COW_HP = 180;
     public final static int COW_SPEED = 1;
 
+    public final static int GRASS_HEAL_POWER = 5;
+
     private int wolfQty;
     private int foxQty;
     private int hareQty;

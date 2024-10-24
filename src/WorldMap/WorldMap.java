@@ -1,8 +1,6 @@
 package WorldMap;
 
 import Entities.Entity;
-import Entities.Herbivores.Herbivore;
-import Entities.Predators.Predator;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,7 +10,7 @@ public class WorldMap {
     private final int horizontalMapSize;
     private final int verticalMapSize;
     private final int totalMapSize;
-    private final Set<Coordinates> availableCoordinates = new HashSet<>();
+    private final List<Coordinates> availableCoordinates = new ArrayList<>();
     private final ConcurrentHashMap<Coordinates, Entity> flatMap = new ConcurrentHashMap<>();
     public static final int MIN_MAP_SIZE = 20;
 
@@ -28,10 +26,14 @@ public class WorldMap {
         }
     }
 
-    public void setAvailableCells() {
+    //проходимся по карте и создаем координаты
+    public void setMapCells() {
         for (int i = 0; i < horizontalMapSize; i++) {
             for (int j = 0; j < verticalMapSize; j++) {
-                availableCoordinates.add(new Coordinates(i, j));
+                Coordinates cell = new Coordinates(i, j);
+                if (flatMap.get(cell) == null){
+                    availableCoordinates.add(cell);
+                }
             }
         }
     }
@@ -42,33 +44,38 @@ public class WorldMap {
                     "\nНет свободных ячеек, карта переполнена или отсутствует");
             System.exit(0);
         }
-        Random random = new Random();
-        int index = random.nextInt(availableCoordinates.size());
-        Iterator<Coordinates> iterator = availableCoordinates.iterator();
-        for (int i = 0; i < index; i++) {
-            iterator.next();
-        }
-        return iterator.next();
+        Collections.shuffle(availableCoordinates);
+        return availableCoordinates.getFirst();
     }
 
-    public Set<Coordinates> getPredators () {
-        Set<Coordinates> predators = new HashSet<>();
-        for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
-            if (entry instanceof Predator) {
-                predators.add(entry.getKey());
-            }
-        }
-        return predators;
+    public List<Entity> getEntitiesList() {
+        return new ArrayList<>(flatMap.values());
     }
 
-    public Set<Coordinates> getHerbivores () {
-        Set<Coordinates> herbivores = new HashSet<>();
-        for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
-            if (entry instanceof Herbivore) {
-                herbivores.add(entry.getKey());
+    public Entity getEntityByCoordinate (Coordinates coordinates) {
+        try {
+            for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
+                if (entry.getKey().equals(coordinates)) {
+                    return entry.getValue();
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Существа по этой координате не обнаружено" + e.getMessage());
         }
-        return herbivores;
+        return null;
+    }
+
+    public Coordinates getCoordinatesByEntity (Entity entity) {
+        try {
+            for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
+                if (entry.getValue().equals(entity)) {
+                    return entry.getKey();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Существа по этой координате не обнаружено" + e.getMessage());
+        }
+        return null;
     }
 
     public int getHorizontalMapSize() {
@@ -79,7 +86,7 @@ public class WorldMap {
         return verticalMapSize;
     }
 
-    public Set<Coordinates> getAvailableCoordinates() {
+    public List<Coordinates> getRandomAvailableCoordinates() {
         return availableCoordinates;
     }
 

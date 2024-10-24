@@ -2,14 +2,17 @@ package Entities.StaticObjects;
 
 import Entities.Consumable;
 import Entities.Entity;
+import Entities.EntityConfig;
 
-public class Grass extends Entity implements Consumable {
+public class Grass extends Inanimate implements Consumable {
 
-    public Grass() {
+    @Override
+    public int getStateEffect() {
+        return EntityConfig.GRASS_HEAL_POWER;
     }
 
     @Override
-    public boolean isConsumable() {
-        return true;
+    public String toString() {
+        return "Трава";
     }
 }

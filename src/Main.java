@@ -1,23 +1,29 @@
-import Actions.InitActions;
-import Actions.TurnActions;
+
+import Actions.Actions;
+import Actions.Motions;
+import Actions.MapFiller;
+import Actions.Restorer;
 import Entities.Entity;
-import Pathfinder.PathFinder;
-import WorldMap.Renderer;
+import WorldMap.ConsoleRenderer;
 import WorldMap.WorldMap;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        WorldMap worldMap = new WorldMap(7, 4);
-        InitActions initActions = new InitActions();
-        Renderer renderer = new Renderer();
-        TurnActions turnActions = new TurnActions();
-        initActions.mapSetup(worldMap);
-        renderer.render(worldMap);
+        WorldMap worldMap = new WorldMap(7, 7);
+        Actions mapFiller = new MapFiller();
+        Actions creatureMotions = new Motions();
+        Actions restorer = new Restorer();
+        ConsoleRenderer consoleRenderer = new ConsoleRenderer();
+        mapFiller.perform(worldMap);
+        consoleRenderer.render(worldMap);
         System.out.println();
-        for (int i = 0; i < 7; i++) {
-            turnActions.moveEntities2(worldMap);
-            renderer.render(worldMap);
+        for (int i = 0; i < 20; i++) {
+            creatureMotions.perform(worldMap);
+            consoleRenderer.render(worldMap);
+            //restorer.perform(worldMap);
             System.out.println();
         }
 

@@ -13,5 +13,8 @@ public class Wolf extends Predator {
         herbivore.setHealthPoints(herbivore.getHealthPoints() - this.getAttackPower());
     }
 
-
+    @Override
+    public String toString() {
+        return "Волк";
+    }
 }

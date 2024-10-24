@@ -2,8 +2,10 @@ package Entities.StaticObjects;
 
 import Entities.Entity;
 
-public class Rock extends Entity {
+public class Rock extends Inanimate {
 
-    public Rock () {
+    @Override
+    public String toString() {
+        return "Камень";
     }
 }
