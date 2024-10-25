@@ -2,17 +2,20 @@ package WorldMap;
 
 import Entities.Entity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WorldMap {
 
+    public static final int MIN_MAP_SIZE = 20;
     private final int horizontalMapSize;
     private final int verticalMapSize;
     private final int totalMapSize;
     private final List<Coordinates> availableCoordinates = new ArrayList<>();
     private final ConcurrentHashMap<Coordinates, Entity> flatMap = new ConcurrentHashMap<>();
-    public static final int MIN_MAP_SIZE = 20;
 
     public WorldMap(int horizontalMapSize, int verticalMapSize) {
         this.horizontalMapSize = horizontalMapSize;
@@ -31,7 +34,7 @@ public class WorldMap {
         for (int i = 0; i < horizontalMapSize; i++) {
             for (int j = 0; j < verticalMapSize; j++) {
                 Coordinates cell = new Coordinates(i, j);
-                if (flatMap.get(cell) == null){
+                if (flatMap.get(cell) == null) {
                     availableCoordinates.add(cell);
                 }
             }
@@ -40,19 +43,22 @@ public class WorldMap {
 
     public Coordinates getRandomAvailableCell() {
         if (availableCoordinates.isEmpty()) {
-            System.out.println("Программа не может быть запущена:" +
-                    "\nНет свободных ячеек, карта переполнена или отсутствует");
+            System.out.println("Программа не может быть запущена:" + "\nНет свободных ячеек, карта переполнена или отсутствует");
             System.exit(0);
         }
         Collections.shuffle(availableCoordinates);
-        return availableCoordinates.getFirst();
+        return availableCoordinates.removeFirst();
     }
 
     public List<Entity> getEntitiesList() {
         return new ArrayList<>(flatMap.values());
     }
 
-    public Entity getEntityByCoordinate (Coordinates coordinates) {
+    public List<Coordinates> getCoordinatesList() {
+        return new ArrayList<>(flatMap.keySet());
+    }
+
+    public Entity getEntityByCoordinate(Coordinates coordinates) {
         try {
             for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
                 if (entry.getKey().equals(coordinates)) {
@@ -65,7 +71,7 @@ public class WorldMap {
         return null;
     }
 
-    public Coordinates getCoordinatesByEntity (Entity entity) {
+    public Coordinates getCoordinatesByEntity(Entity entity) {
         try {
             for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
                 if (entry.getValue().equals(entity)) {
@@ -78,20 +84,32 @@ public class WorldMap {
         return null;
     }
 
+    public void removeEntity(Entity entity) {
+        for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
+            if (entry.getValue().equals(entity)) {
+                flatMap.remove(entry.getKey());
+            }
+        }
+    }
+
+    public void removeEntity(Coordinates coordinates) {
+        for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
+            if (entry.getKey().equals(coordinates)) {
+                flatMap.remove(entry.getKey());
+            }
+        }
+    }
+
+    public void placeEntity(Coordinates coordinates, Entity entity) {
+        flatMap.put(coordinates, entity);
+    }
+
     public int getHorizontalMapSize() {
         return horizontalMapSize;
     }
 
     public int getVerticalMapSize() {
         return verticalMapSize;
-    }
-
-    public List<Coordinates> getRandomAvailableCoordinates() {
-        return availableCoordinates;
-    }
-
-    public ConcurrentHashMap<Coordinates, Entity> getFlatMap() {
-        return flatMap;
     }
 
     public int getTotalMapSize() {

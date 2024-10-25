@@ -35,6 +35,7 @@ public class MapFiller extends InitActions {
         for (int i = 0; i < quantity; i++) {
             Entity entity = createEntity(entityClass);
             placeEntity(worldMap.getRandomAvailableCell(), entity, worldMap);
+            int i2 = 123;
         }
     }
 
@@ -68,8 +69,7 @@ public class MapFiller extends InitActions {
 
     //метод для вставки существа в ячейку на карту
     private void placeEntity(Coordinates coordinates, Entity entity, WorldMap worldMap) {
-        worldMap.getFlatMap().put(coordinates, entity);
-        worldMap.getRandomAvailableCoordinates().remove(coordinates);
+        worldMap.placeEntity(coordinates, entity);
     }
 
 }

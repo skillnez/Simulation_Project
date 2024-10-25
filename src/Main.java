@@ -12,7 +12,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        WorldMap worldMap = new WorldMap(7, 7);
+        WorldMap worldMap = new WorldMap(30, 30);
         Actions mapFiller = new MapFiller();
         Actions creatureMotions = new Motions();
         Actions restorer = new Restorer();
@@ -20,7 +20,7 @@ public class Main {
         mapFiller.perform(worldMap);
         consoleRenderer.render(worldMap);
         System.out.println();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 100; i++) {
             creatureMotions.perform(worldMap);
             consoleRenderer.render(worldMap);
             //restorer.perform(worldMap);

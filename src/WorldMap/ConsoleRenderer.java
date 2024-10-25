@@ -21,8 +21,8 @@ public class ConsoleRenderer {
     }
 
     private void renderEntitySprite(WorldMap worldMap, Coordinates coordinates) {
-        if (worldMap.getFlatMap().containsKey(coordinates)) {
-            System.out.print(ChoseEntitySprite(worldMap.getFlatMap().get(coordinates)));
+        if (worldMap.getCoordinatesList().contains(coordinates)) {
+            System.out.print(ChoseEntitySprite(worldMap.getEntityByCoordinate(coordinates)));
         } else {
             System.out.print(EntitySprite.GROUND);
         }

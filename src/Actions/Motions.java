@@ -17,6 +17,7 @@ import java.util.Set;
 
 public class Motions extends TurnActions{
     //Починено, но к этому методу повнимательнее
+    //Пока все оттестировано и закомичено, мне нравится как работает!
     @Override
     public void perform(WorldMap worldMap) {
         Set<Entity> proceededEntities = new HashSet<>();
@@ -74,8 +75,8 @@ public class Motions extends TurnActions{
     }
 
     private void initiateMove(WorldMap worldMap, Coordinates toMove, Coordinates current, Entity entity) {
-        worldMap.getFlatMap().put(toMove, entity);
-        worldMap.getFlatMap().remove(current);
+        worldMap.placeEntity(toMove, entity);
+        worldMap.removeEntity(current);
     }
 
     private boolean underAttack(int speed, List<Coordinates> path) {
