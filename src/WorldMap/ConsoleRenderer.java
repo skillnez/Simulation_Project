@@ -5,24 +5,22 @@ import Sprites.EntitySprite;
 
 public class ConsoleRenderer {
 
-//    Попытки сильнее разделить этот метод приводили к кратному усложнению понимания кода,
-//    поэтому я не нашел пока необходимости это сделать
-
-    public void render(WorldMap worldMap) {
-        for (int vertical = 0; vertical < worldMap.getVerticalMapSize(); vertical++) {
-            for (int horizontal = 0; horizontal < worldMap.getHorizontalMapSize(); horizontal++) {
+    public void render(GridMap gridMap) {
+        for (int vertical = 0; vertical < gridMap.getVerticalMapSize(); vertical++) {
+            for (int horizontal = 0; horizontal < gridMap.getHorizontalMapSize(); horizontal++) {
                 Coordinates coordinates = new Coordinates(horizontal, vertical);
-                System.out.print("\033[32m"+" ");// нужно для увеличения интервала между ячейками карты
-                renderEntitySprite(worldMap, coordinates);
+                System.out.print(EntitySprite.BACKGROUND + " "); // нужно для увеличения интервала между ячейками карты и для фона
+                renderEntitySprite(gridMap, coordinates);
             }
             String reset = "\u001B[0m";
-            System.out.println(reset); // нужно для переноса строки
+            System.out.println(reset); // нужно для переноса строки и цвета фона
         }
+        System.out.println();
     }
 
-    private void renderEntitySprite(WorldMap worldMap, Coordinates coordinates) {
-        if (worldMap.getCoordinatesList().contains(coordinates)) {
-            System.out.print(ChoseEntitySprite(worldMap.getEntityByCoordinate(coordinates)));
+    private void renderEntitySprite(GridMap gridMap, Coordinates coordinates) {
+        if (gridMap.getCoordinatesList().contains(coordinates)) {
+            System.out.print(ChoseEntitySprite(gridMap.getEntity(coordinates)));
         } else {
             System.out.print(EntitySprite.GROUND);
         }

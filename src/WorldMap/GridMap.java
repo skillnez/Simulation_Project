@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class WorldMap {
+public class GridMap implements BaseMap {
 
     public static final int MIN_MAP_SIZE = 20;
     private final int horizontalMapSize;
     private final int verticalMapSize;
     private final int totalMapSize;
-    private final List<Coordinates> availableCoordinates = new ArrayList<>();
+    private final List<Coordinates> availableCell = new ArrayList<>();
     private final ConcurrentHashMap<Coordinates, Entity> flatMap = new ConcurrentHashMap<>();
 
-    public WorldMap(int horizontalMapSize, int verticalMapSize) {
+    public GridMap(int horizontalMapSize, int verticalMapSize) {
         this.horizontalMapSize = horizontalMapSize;
         this.verticalMapSize = verticalMapSize;
         this.totalMapSize = horizontalMapSize * verticalMapSize;
@@ -29,49 +29,30 @@ public class WorldMap {
         }
     }
 
-    //проходимся по карте и создаем координаты
-    public void setMapCells() {
+    //проходимся по карте и создаем пустые ячейки там где не занято
+    public void initMapCells() {
+        availableCell.clear();
         for (int i = 0; i < horizontalMapSize; i++) {
             for (int j = 0; j < verticalMapSize; j++) {
                 Coordinates cell = new Coordinates(i, j);
-                if (flatMap.get(cell) == null) {
-                    availableCoordinates.add(cell);
+                if (isEmpty(cell)) {
+                    availableCell.add(cell);
                 }
             }
         }
     }
 
+    //Берем любую пустую ячейку
     public Coordinates getRandomAvailableCell() {
-        if (availableCoordinates.isEmpty()) {
-            System.out.println("Программа не может быть запущена:" + "\nНет свободных ячеек, карта переполнена или отсутствует");
-            System.exit(0);
+        if (availableCell.isEmpty()) {
+            System.out.println("Нет свободных ячеек, карта переполнена или отсутствует");
         }
-        Collections.shuffle(availableCoordinates);
-        return availableCoordinates.removeFirst();
+        Collections.shuffle(availableCell);
+        return availableCell.removeFirst();
     }
 
-    public List<Entity> getEntitiesList() {
-        return new ArrayList<>(flatMap.values());
-    }
-
-    public List<Coordinates> getCoordinatesList() {
-        return new ArrayList<>(flatMap.keySet());
-    }
-
-    public Entity getEntityByCoordinate(Coordinates coordinates) {
-        try {
-            for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
-                if (entry.getKey().equals(coordinates)) {
-                    return entry.getValue();
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Существа по этой координате не обнаружено" + e.getMessage());
-        }
-        return null;
-    }
-
-    public Coordinates getCoordinatesByEntity(Entity entity) {
+    @Override
+    public Coordinates getCoordinates(Entity entity) {
         try {
             for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
                 if (entry.getValue().equals(entity)) {
@@ -84,6 +65,7 @@ public class WorldMap {
         return null;
     }
 
+    @Override
     public void removeEntity(Entity entity) {
         for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
             if (entry.getValue().equals(entity)) {
@@ -92,6 +74,7 @@ public class WorldMap {
         }
     }
 
+    @Override
     public void removeEntity(Coordinates coordinates) {
         for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
             if (entry.getKey().equals(coordinates)) {
@@ -100,8 +83,35 @@ public class WorldMap {
         }
     }
 
+    @Override
+    public Entity getEntity(Coordinates coordinates) {
+        try {
+            for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
+                if (entry.getKey().equals(coordinates)) {
+                    return entry.getValue();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Существа по этой координате не обнаружено" + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
     public void placeEntity(Coordinates coordinates, Entity entity) {
         flatMap.put(coordinates, entity);
+    }
+
+    public List<Entity> getEntitiesList() {
+        return new ArrayList<>(flatMap.values());
+    }
+
+    public List<Coordinates> getCoordinatesList() {
+        return new ArrayList<>(flatMap.keySet());
+    }
+
+    private boolean isEmpty(Coordinates cell) {
+        return flatMap.get(cell) == null;
     }
 
     public int getHorizontalMapSize() {

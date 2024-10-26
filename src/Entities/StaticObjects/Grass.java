@@ -1,7 +1,6 @@
 package Entities.StaticObjects;
 
 import Entities.Consumable;
-import Entities.Entity;
 import Entities.EntityConfig;
 
 public class Grass extends Inanimate implements Consumable {

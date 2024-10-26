@@ -1,10 +1,12 @@
 package Pathfinder;
 
-import Entities.*;
+import Entities.Consumable;
+import Entities.Entity;
 import Entities.Herbivores.Herbivore;
 import Entities.Predators.Predator;
+import WorldMap.BaseMap;
 import WorldMap.Coordinates;
-import WorldMap.WorldMap;
+import WorldMap.GridMap;
 
 import java.util.*;
 
@@ -15,7 +17,7 @@ public class PathFinder {
     Set<Coordinates> visited = new HashSet<>();
     Map<Coordinates, Coordinates> parent = new HashMap<>();
 
-    public List<Coordinates> findPath(WorldMap worldMap, Coordinates start) {
+    public List<Coordinates> findPath(GridMap gridMap, Coordinates start) {
         clearAllConditions();
 
         Queue<Coordinates> processingCells = new LinkedList<>();
@@ -24,23 +26,23 @@ public class PathFinder {
         parent.put(start, null);
         while (!processingCells.isEmpty()) {
             Coordinates current = processingCells.poll();
-            if (isGoal(worldMap, current, start)) {
+            if (isGoal(gridMap, current, start)) {
                 goal = current;
-                return reconstructPath(worldMap);
+                return reconstructPath();
             }
-            getNeighbors(processingCells, current, worldMap, start);
+            getNeighbors(processingCells, current, gridMap, start);
         }
         return Collections.emptyList();
     }
 
-    private void clearAllConditions () {
+    private void clearAllConditions() {
         goal = null;
         path.clear();
         visited.clear();
         parent.clear();
     }
 
-    private List<Coordinates> reconstructPath(WorldMap worldMap) {
+    private List<Coordinates> reconstructPath() {
         for (Coordinates at = goal; at != null; at = parent.get(at)) {
             path.add(at);
         }
@@ -49,7 +51,7 @@ public class PathFinder {
         return path;
     }
 
-    public void getNeighbors(Queue<Coordinates> queue, Coordinates current, WorldMap worldMap, Coordinates start) {
+    public void getNeighbors(Queue<Coordinates> queue, Coordinates current, GridMap gridMap, Coordinates start) {
         coordinatesBuffer.clear();
         int[] verticalDirection = {-1, 1, 0, 0};
         int[] horizontalDirection = {0, 0, 1, -1};
@@ -58,7 +60,7 @@ public class PathFinder {
             int vertical = current.getVertical() + verticalDirection[i];
             coordinatesBuffer.add(new Coordinates(horizontal, vertical));
             Coordinates inWatch = coordinatesBuffer.getLast();
-            if (isNeighborValid(inWatch, worldMap, start)) {
+            if (isNeighborValid(inWatch, gridMap, start)) {
                 parent.put(inWatch, current);
                 queue.add(inWatch);
                 visited.add(inWatch);
@@ -66,24 +68,25 @@ public class PathFinder {
         }
     }
 
-    private boolean isNeighborValid(Coordinates inWatch, WorldMap worldMap, Coordinates start) {
-        return isInBounds(worldMap, inWatch) && !visited.contains(inWatch) &&
-                (!isCellOccupied(worldMap, inWatch) || isGoal(worldMap, inWatch, start));
+    private boolean isNeighborValid(Coordinates inWatch, GridMap gridMap, Coordinates start) {
+        return isInBounds(gridMap, inWatch) && !visited.contains(inWatch) &&
+                (!isCellOccupied(gridMap, inWatch) || isGoal(gridMap, inWatch, start));
     }
 
-    private boolean isInBounds(WorldMap worldMap, Coordinates inWatch) {
-        return inWatch.getVertical() < worldMap.getVerticalMapSize() && inWatch.getHorizontal() <
-                worldMap.getHorizontalMapSize() && inWatch.getVertical() >= 0 && inWatch.getHorizontal() >= 0;
+    private boolean isInBounds(GridMap gridMap, Coordinates inWatch) {
+        return inWatch.getVertical() < gridMap.getVerticalMapSize() &&
+                inWatch.getHorizontal() < gridMap.getHorizontalMapSize() &&
+                inWatch.getVertical() >= 0 && inWatch.getHorizontal() >= 0;
     }
 
-    private boolean isCellOccupied(WorldMap worldMap, Coordinates inWatch) {
-        return worldMap.getEntityByCoordinate(inWatch) != null;
+    private boolean isCellOccupied(BaseMap baseMap, Coordinates inWatch) {
+        return baseMap.getEntity(inWatch) != null;
     }
 
-    private boolean isGoal(WorldMap worldMap, Coordinates inWatch, Coordinates start) {
-        Entity target = worldMap.getEntityByCoordinate(inWatch);
-        Entity seeker = worldMap.getEntityByCoordinate(start);
-        return (seeker instanceof Predator && target instanceof Herbivore)
-                || (seeker instanceof Herbivore && target instanceof Consumable);
+    private boolean isGoal(BaseMap baseMap, Coordinates inWatch, Coordinates start) {
+        Entity target = baseMap.getEntity(inWatch);
+        Entity seeker = baseMap.getEntity(start);
+        return (seeker instanceof Predator && target instanceof Herbivore) ||
+                (seeker instanceof Herbivore && target instanceof Consumable);
     }
 }

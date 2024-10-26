@@ -1,7 +1,5 @@
 package Entities;
 
-import Sprites.EntitySprite;
-
 import java.util.Objects;
 
 public abstract class Entity {

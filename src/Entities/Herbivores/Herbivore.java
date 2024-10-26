@@ -9,7 +9,7 @@ public abstract class Herbivore extends Creature {
         super(healthPoints, speed);
     }
 
-    public void consume(Consumable consumable){
+    public void consume(Consumable consumable) {
         int damageTaken = getMaxHealthPoints() - this.getHealthPoints();
         if (consumable.getStateEffect() < damageTaken) {
             this.setHealthPoints(this.getHealthPoints() + consumable.getStateEffect());

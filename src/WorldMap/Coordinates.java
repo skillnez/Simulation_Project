@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Coordinates {
 
-    private int horizontal;
-    private int vertical;
+    private final int horizontal;
+    private final int vertical;
 
     public Coordinates(int horizontal, int vertical) {
         this.horizontal = horizontal;
@@ -23,14 +23,6 @@ public class Coordinates {
     @Override
     public int hashCode() {
         return Objects.hash(horizontal, vertical);
-    }
-
-    public void setHorizontal(int horizontal) {
-        this.horizontal = horizontal;
-    }
-
-    public void setVertical(int vertical) {
-        this.vertical = vertical;
     }
 
     public int getHorizontal() {

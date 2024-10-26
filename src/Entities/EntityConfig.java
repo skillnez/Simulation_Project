@@ -1,6 +1,6 @@
 package Entities;
 
-import WorldMap.WorldMap;
+import WorldMap.GridMap;
 
 public class EntityConfig {
 
@@ -28,14 +28,14 @@ public class EntityConfig {
     private int treeQty;
     private int grassQty;
 
-    public void setCreaturesQuantity(WorldMap worldMap) {
-        wolfQty = worldMap.getTotalMapSize() / 20;
-        foxQty = worldMap.getTotalMapSize() / 20;
-        hareQty = worldMap.getTotalMapSize() / 20;
-        cowQty = worldMap.getTotalMapSize() / 40;
-        rockQty = worldMap.getTotalMapSize() / 30;
-        treeQty = worldMap.getTotalMapSize() / 20;
-        grassQty = worldMap.getTotalMapSize() / 20;
+    public void setCreaturesQuantity(GridMap gridMap) {
+        wolfQty = gridMap.getTotalMapSize() / 20;
+        foxQty = gridMap.getTotalMapSize() / 20;
+        hareQty = gridMap.getTotalMapSize() / 20;
+        cowQty = gridMap.getTotalMapSize() / 40;
+        rockQty = gridMap.getTotalMapSize() / 30;
+        treeQty = gridMap.getTotalMapSize() / 20;
+        grassQty = gridMap.getTotalMapSize() / 20;
     }
 
     public int getHareQty() {

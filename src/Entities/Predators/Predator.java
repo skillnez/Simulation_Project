@@ -1,7 +1,6 @@
 package Entities.Predators;
 
 import Entities.Creature;
-import Entities.Entity;
 import Entities.Herbivores.Herbivore;
 
 public abstract class Predator extends Creature {

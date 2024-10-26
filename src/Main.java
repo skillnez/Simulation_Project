@@ -2,29 +2,29 @@
 import Actions.Actions;
 import Actions.Motions;
 import Actions.MapFiller;
-import Actions.Restorer;
-import Entities.Entity;
+import Actions.EntityRestorer;
+import Sprites.EntitySprite;
 import WorldMap.ConsoleRenderer;
-import WorldMap.WorldMap;
-
-import java.util.List;
+import WorldMap.GridMap;
 
 public class Main {
     public static void main(String[] args) {
 
-        WorldMap worldMap = new WorldMap(30, 30);
+        GridMap gridMap = new GridMap(7, 7);
         Actions mapFiller = new MapFiller();
         Actions creatureMotions = new Motions();
-        Actions restorer = new Restorer();
+        Actions restorer = new EntityRestorer();
         ConsoleRenderer consoleRenderer = new ConsoleRenderer();
-        mapFiller.perform(worldMap);
-        consoleRenderer.render(worldMap);
+        mapFiller.perform(gridMap);
+        consoleRenderer.render(gridMap);
         System.out.println();
-        for (int i = 0; i < 100; i++) {
-            creatureMotions.perform(worldMap);
-            consoleRenderer.render(worldMap);
-            //restorer.perform(worldMap);
-            System.out.println();
+        Simulation simulation = new Simulation();
+        for (int i = 0; i < 1000; i++) {
+//            creatureMotions.perform(gridMap);
+//            restorer.perform(gridMap);
+//            consoleRenderer.render(gridMap);
+//            System.out.println();
+            simulation.nextTurn();
         }
 
         int i = 123;

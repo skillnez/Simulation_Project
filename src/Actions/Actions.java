@@ -1,7 +1,7 @@
 package Actions;
 
-import WorldMap.WorldMap;
+import WorldMap.GridMap;
 
 public interface Actions {
-    void perform(WorldMap worldMap);
+    void perform(GridMap gridMap);
 }

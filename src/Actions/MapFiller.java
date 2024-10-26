@@ -1,6 +1,7 @@
 package Actions;
 
-import Entities.*;
+import Entities.Entity;
+import Entities.EntityConfig;
 import Entities.Herbivores.Cow;
 import Entities.Herbivores.Hare;
 import Entities.Predators.Fox;
@@ -8,8 +9,7 @@ import Entities.Predators.Wolf;
 import Entities.StaticObjects.Grass;
 import Entities.StaticObjects.Rock;
 import Entities.StaticObjects.Tree;
-import WorldMap.Coordinates;
-import WorldMap.WorldMap;
+import WorldMap.GridMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,24 +18,23 @@ import java.util.NoSuchElementException;
 public class MapFiller extends InitActions {
 
     @Override
-    public void perform(WorldMap worldMap) {
-        worldMap.setMapCells();
+    public void perform(GridMap gridMap) {
+        gridMap.initMapCells();
         EntityConfig entityConfig = new EntityConfig();
-        entityConfig.setCreaturesQuantity(worldMap);
+        entityConfig.setCreaturesQuantity(gridMap);
         Map<Class<? extends Entity>, Integer> entityToSpawn = fillEntityMap(entityConfig);
         for (Map.Entry<Class<? extends Entity>, Integer> entry : entityToSpawn.entrySet()) {
             Class<? extends Entity> entityClass = entry.getKey();
             int quantity = entry.getValue();
-            spawnEntities(worldMap, entityClass, quantity);
+            spawnEntities(gridMap, entityClass, quantity);
         }
     }
 
     //помещаем в нужном количестве существа на карту, количество существ в дальнейшем берется из fillEntityMap
-    public void spawnEntities(WorldMap worldMap, Class<? extends Entity> entityClass, int quantity) {
+    private void spawnEntities(GridMap gridMap, Class<? extends Entity> entityClass, int quantity) {
         for (int i = 0; i < quantity; i++) {
             Entity entity = createEntity(entityClass);
-            placeEntity(worldMap.getRandomAvailableCell(), entity, worldMap);
-            int i2 = 123;
+            gridMap.placeEntity(gridMap.getRandomAvailableCell(), entity);
         }
     }
 
@@ -66,10 +65,4 @@ public class MapFiller extends InitActions {
         entityToSpawn.put(Tree.class, entityConfig.getTreeQty());
         return entityToSpawn;
     }
-
-    //метод для вставки существа в ячейку на карту
-    private void placeEntity(Coordinates coordinates, Entity entity, WorldMap worldMap) {
-        worldMap.placeEntity(coordinates, entity);
-    }
-
 }
