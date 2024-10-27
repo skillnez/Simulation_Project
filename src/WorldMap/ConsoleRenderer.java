@@ -15,7 +15,6 @@ public class ConsoleRenderer {
             String reset = "\u001B[0m";
             System.out.println(reset); // нужно для переноса строки и цвета фона
         }
-        System.out.println();
     }
 
     private void renderEntitySprite(GridMap gridMap, Coordinates coordinates) {

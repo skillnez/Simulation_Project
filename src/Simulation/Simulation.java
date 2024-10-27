@@ -1,32 +1,35 @@
+package Simulation;
+
 import Actions.Actions;
 import WorldMap.ConsoleRenderer;
 import WorldMap.GridMap;
 import Actions.Motions;
 import Actions.EntityRestorer;
+import Actions.MapFiller;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Simulation {
 
-    GridMap gridMap;
-    Actions mapFiller;
-    List<Actions> actions = List.of(new Motions(), new EntityRestorer());
-    ConsoleRenderer consoleRenderer;
+    private final GridMap gridMap = new GridMap( 15, 15);
+    private final List<Actions> actions = List.of(new Motions(), new EntityRestorer());
+    private final ConsoleRenderer consoleRenderer = new ConsoleRenderer();
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final AtomicBoolean paused = new AtomicBoolean(false);
+    private final SimulationTurnCounter turnCounter;
+    private final SimulationUI simulationUI;
 
-    public Simulation(GridMap gridMap, Actions mapFiller, List<Actions> actions, ConsoleRenderer consoleRenderer) {
-        this.gridMap = gridMap;
-        this.mapFiller = mapFiller;
-        this.actions = actions;
-        this.consoleRenderer = consoleRenderer;
-        this.mapFiller.perform(gridMap);
+    public Simulation(SimulationTurnCounter turnCounter, SimulationUI simulationUI) {
+        this.turnCounter = turnCounter;
+        this.simulationUI = simulationUI;
+        Actions mapFiller = new MapFiller();
+        mapFiller.perform(gridMap);
     }
 
     public void start() {
-            running.set(true);
-            paused.set(false);
+        running.set(true);
+        paused.set(false);
 
         new Thread(() -> {
             while (running.get()) {
@@ -44,10 +47,13 @@ public class Simulation {
     }
 
     public void nextTurn () {
+        turnCounter.countTurns();
+        System.out.println(simulationUI.consoleGraphics(1));
         for (Actions action : actions) {
             action.perform(gridMap);
         }
         consoleRenderer.render(gridMap);
+        System.out.println(simulationUI.consoleGraphics(2));
     }
 
     public void pause() {
