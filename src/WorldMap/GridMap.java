@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class GridMap implements BaseMap {
 
-    public static final int MIN_MAP_SIZE = 20;
+    public static final int MIN_MAP_SIZE = 30;
     private final int horizontalMapSize;
     private final int verticalMapSize;
     private final int totalMapSize;
