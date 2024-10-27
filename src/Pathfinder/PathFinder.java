@@ -11,15 +11,14 @@ import WorldMap.GridMap;
 import java.util.*;
 
 public class PathFinder {
-    Coordinates goal;
-    List<Coordinates> path = new ArrayList<>();
-    List<Coordinates> coordinatesBuffer = new ArrayList<>();
-    Set<Coordinates> visited = new HashSet<>();
-    Map<Coordinates, Coordinates> parent = new HashMap<>();
+    private final List<Coordinates> path = new ArrayList<>();
+    private final List<Coordinates> coordinatesBuffer = new ArrayList<>();
+    private final Set<Coordinates> visited = new HashSet<>();
+    private final Map<Coordinates, Coordinates> parent = new HashMap<>();
+    private Coordinates goal;
 
     public List<Coordinates> findPath(GridMap gridMap, Coordinates start) {
         clearAllConditions();
-
         Queue<Coordinates> processingCells = new LinkedList<>();
         processingCells.add(start);
         visited.add(start);
@@ -51,7 +50,7 @@ public class PathFinder {
         return path;
     }
 
-    public void getNeighbors(Queue<Coordinates> queue, Coordinates current, GridMap gridMap, Coordinates start) {
+    private void getNeighbors(Queue<Coordinates> queue, Coordinates current, GridMap gridMap, Coordinates start) {
         coordinatesBuffer.clear();
         int[] verticalDirection = {-1, 1, 0, 0};
         int[] horizontalDirection = {0, 0, 1, -1};
@@ -69,14 +68,11 @@ public class PathFinder {
     }
 
     private boolean isNeighborValid(Coordinates inWatch, GridMap gridMap, Coordinates start) {
-        return isInBounds(gridMap, inWatch) && !visited.contains(inWatch) &&
-                (!isCellOccupied(gridMap, inWatch) || isGoal(gridMap, inWatch, start));
+        return isInBounds(gridMap, inWatch) && !visited.contains(inWatch) && (!isCellOccupied(gridMap, inWatch) || isGoal(gridMap, inWatch, start));
     }
 
     private boolean isInBounds(GridMap gridMap, Coordinates inWatch) {
-        return inWatch.getVertical() < gridMap.getVerticalMapSize() &&
-                inWatch.getHorizontal() < gridMap.getHorizontalMapSize() &&
-                inWatch.getVertical() >= 0 && inWatch.getHorizontal() >= 0;
+        return inWatch.getVertical() < gridMap.getVerticalMapSize() && inWatch.getHorizontal() < gridMap.getHorizontalMapSize() && inWatch.getVertical() >= 0 && inWatch.getHorizontal() >= 0;
     }
 
     private boolean isCellOccupied(BaseMap baseMap, Coordinates inWatch) {
@@ -86,7 +82,6 @@ public class PathFinder {
     private boolean isGoal(BaseMap baseMap, Coordinates inWatch, Coordinates start) {
         Entity target = baseMap.getEntity(inWatch);
         Entity seeker = baseMap.getEntity(start);
-        return (seeker instanceof Predator && target instanceof Herbivore) ||
-                (seeker instanceof Herbivore && target instanceof Consumable);
+        return (seeker instanceof Predator && target instanceof Herbivore) || (seeker instanceof Herbivore && target instanceof Consumable);
     }
 }

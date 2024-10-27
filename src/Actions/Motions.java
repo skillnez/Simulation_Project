@@ -49,20 +49,11 @@ public class Motions extends TurnActions{
     private void initiateAttacks(Entity attacker, Entity target, BaseMap baseMap, List<Coordinates> path, Coordinates from) {
         if (attacker instanceof Herbivore) {
             ((Herbivore) attacker).consume((Consumable) target);
-//            System.out.println(attacker + " съел " + target);
-//            System.out.println(((Herbivore) attacker).getId());
-//            System.out.println();
-//            System.out.println("У существа здоровье: " + ((Herbivore) attacker).getHealthPoints());
             initiateMove(baseMap, path.getLast(), from, attacker);
         }
         if (attacker instanceof Predator) {
             ((Predator) attacker).attack((Herbivore) target);
-//            System.out.println(attacker + " нанес " + target + " " + ((Predator) attacker).getAttackPower() + " урона");
-//            System.out.println("id: " +((Predator) attacker).getId());
-//            System.out.println("id: " + ((Herbivore) target).getId());
-//            System.out.println("У " + target + " " + ((Herbivore) target).getHealthPoints() + " хп" + " осталось");
             if (!((Herbivore) target).isAlive()) {
-//                System.out.println(attacker + " съел " + target);
                 initiateMove(baseMap, path.getLast(), from, attacker);
             } else if (path.size() != 1) {
                 path.removeLast();

@@ -9,11 +9,10 @@ public class ConsoleRenderer {
         for (int vertical = 0; vertical < gridMap.getVerticalMapSize(); vertical++) {
             for (int horizontal = 0; horizontal < gridMap.getHorizontalMapSize(); horizontal++) {
                 Coordinates coordinates = new Coordinates(horizontal, vertical);
-                System.out.print(EntitySprite.BACKGROUND + " "); // нужно для увеличения интервала между ячейками карты и для фона
+                System.out.print(EntitySprite.BACKGROUND + " ");
                 renderEntitySprite(gridMap, coordinates);
             }
-            String reset = "\u001B[0m";
-            System.out.println(reset); // нужно для переноса строки и цвета фона
+            System.out.println(EntitySprite.RESET);
         }
     }
 

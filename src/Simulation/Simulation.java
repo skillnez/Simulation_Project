@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Simulation {
 
-    private final GridMap gridMap = new GridMap( 15, 15);
+    private final GridMap gridMap = new GridMap( 5, 5);
     private final List<Actions> actions = List.of(new Motions(), new EntityRestorer());
     private final ConsoleRenderer consoleRenderer = new ConsoleRenderer();
     private final AtomicBoolean running = new AtomicBoolean(false);
@@ -36,7 +36,7 @@ public class Simulation {
                 if (!paused.get()) {
                     nextTurn();
                     try {
-                        Thread.sleep(1000); // Задержка между ходами
+                        Thread.sleep(1500);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         System.out.println("Симуляция была прервана");

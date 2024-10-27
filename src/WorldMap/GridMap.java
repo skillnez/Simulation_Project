@@ -29,7 +29,6 @@ public class GridMap implements BaseMap {
         }
     }
 
-    //проходимся по карте и создаем пустые ячейки там где не занято
     public void initMapCells() {
         availableCell.clear();
         for (int i = 0; i < horizontalMapSize; i++) {
@@ -42,7 +41,6 @@ public class GridMap implements BaseMap {
         }
     }
 
-    //Берем любую пустую ячейку
     public Coordinates getRandomAvailableCell() {
         if (availableCell.isEmpty()) {
             System.out.println("Нет свободных ячеек, карта переполнена или отсутствует");
@@ -99,7 +97,11 @@ public class GridMap implements BaseMap {
 
     @Override
     public void placeEntity(Coordinates coordinates, Entity entity) {
-        flatMap.put(coordinates, entity);
+        if (coordinates.getHorizontal() <= getHorizontalMapSize() && coordinates.getVertical() <= getVerticalMapSize()) {
+            flatMap.put(coordinates, entity);
+        } else {
+            System.out.println("Вы пытаетесь поместить существо вне границ карты, действие не выполнено");
+        }
     }
 
     public List<Entity> getEntitiesList() {

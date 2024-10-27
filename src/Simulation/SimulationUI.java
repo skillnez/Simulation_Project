@@ -10,13 +10,13 @@ public class SimulationUI {
 
     public final String consoleGraphics(int index) {
         String[] uiMessages = {
-                "███████ ██ ███    ███ ██    ██ ██       █████  ████████ ██  ██████  ███    ██ \n" +
+                        "███████ ██ ███    ███ ██    ██ ██       █████  ████████ ██  ██████  ███    ██ \n" +
                         "██      ██ ████  ████ ██    ██ ██      ██   ██    ██    ██ ██    ██ ████   ██ \n" +
                         "███████ ██ ██ ████ ██ ██    ██ ██      ███████    ██    ██ ██    ██ ██ ██  ██ \n" +
                         "     ██ ██ ██  ██  ██ ██    ██ ██      ██   ██    ██    ██ ██    ██ ██  ██ ██ \n" +
                         "███████ ██ ██      ██  ██████  ███████ ██   ██    ██    ██  ██████  ██   ████ "
-        , printCounter(), "b - begin" + " | p - pause" + " | c - continue" + " | q - quit",
-                "Введите команду (b, p, c, s, q):"};
+        , printCounter(), "p - pause" + " | c - continue" + " | q - quit",
+                "Введите команду (p, c, q):", "b - begin" + " | q - quit", "Введите команду (b, q):"};
         return uiMessages[index];
     }
 

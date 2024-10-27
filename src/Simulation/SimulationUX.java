@@ -14,10 +14,18 @@ public class SimulationUX {
     public void perform() {
         Scanner scanner = new Scanner(System.in);
         String command;
+        int counter = 0;
 
         while (true) {
-            System.out.println(simulationUI.consoleGraphics(2));
-            System.out.println(simulationUI.consoleGraphics(3));
+            if (counter == 0) {
+                counter++;
+            System.out.println(simulationUI.consoleGraphics(4));
+            System.out.println(simulationUI.consoleGraphics(5));
+            }
+            else {
+                System.out.println(simulationUI.consoleGraphics(2));
+                System.out.println(simulationUI.consoleGraphics(3));
+            }
             command = scanner.nextLine().trim().toLowerCase();
 
             switch (command) {
