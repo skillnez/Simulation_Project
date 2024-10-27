@@ -13,9 +13,9 @@ public class EntityConfig {
     public final static int FOX_SPEED = 2;
 
     public final static int HARE_HP = 30;
-    public final static int HARE_SPEED = 3;
+    public final static int HARE_SPEED = 2;
 
-    public final static int COW_HP = 180;
+    public final static int COW_HP = 150;
     public final static int COW_SPEED = 1;
 
     public final static int GRASS_HEAL_POWER = 5;
@@ -29,13 +29,13 @@ public class EntityConfig {
     private int grassQty;
 
     public void setCreaturesQuantity(GridMap gridMap) {
-        wolfQty = gridMap.getTotalMapSize() / 20;
-        foxQty = gridMap.getTotalMapSize() / 20;
-        hareQty = gridMap.getTotalMapSize() / 20;
+        wolfQty = gridMap.getTotalMapSize() / 30;
+        foxQty = gridMap.getTotalMapSize() / 40;
+        hareQty = gridMap.getTotalMapSize() / 30;
         cowQty = gridMap.getTotalMapSize() / 40;
-        rockQty = gridMap.getTotalMapSize() / 30;
-        treeQty = gridMap.getTotalMapSize() / 20;
-        grassQty = gridMap.getTotalMapSize() / 20;
+        rockQty = gridMap.getTotalMapSize() / 10;
+        treeQty = gridMap.getTotalMapSize() / 10;
+        grassQty = gridMap.getTotalMapSize() / 30;
     }
 
     public int getHareQty() {
