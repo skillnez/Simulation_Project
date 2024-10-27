@@ -41,7 +41,7 @@ public class SimulationUX {
                 case "q":
                     simulation.stop();
                     System.out.println("Они еще придут за тобой...");
-                    return; // Завершение программы
+                    return;
                 default:
                     System.out.println("Неизвестная команда. Попробуйте снова.");
             }

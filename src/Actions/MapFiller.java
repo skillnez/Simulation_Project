@@ -30,7 +30,6 @@ public class MapFiller extends InitActions {
         }
     }
 
-    //помещаем в нужном количестве существа на карту, количество существ в дальнейшем берется из fillEntityMap
     private void spawnEntities(GridMap gridMap, Class<? extends Entity> entityClass, int quantity) {
         for (int i = 0; i < quantity; i++) {
             Entity entity = createEntity(entityClass);
@@ -38,7 +37,6 @@ public class MapFiller extends InitActions {
         }
     }
 
-    // при итерации в зависимости от типа существ, создаем их
     private Entity createEntity(Class<? extends Entity> entities) {
         return switch (entities.getSimpleName()) {
             case "Hare" -> new Hare(EntityConfig.HARE_HP, EntityConfig.HARE_SPEED);
@@ -53,7 +51,6 @@ public class MapFiller extends InitActions {
         };
     }
 
-    //Получаем возможных для спавна существ и их возможное количество для текущего размера карты
     private Map<Class<? extends Entity>, Integer> fillEntityMap(EntityConfig entityConfig) {
         Map<Class<? extends Entity>, Integer> entityToSpawn = new HashMap<>();
         entityToSpawn.put(Wolf.class, entityConfig.getWolfQty());

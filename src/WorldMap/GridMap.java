@@ -23,7 +23,7 @@ public class GridMap implements BaseMap {
         this.totalMapSize = horizontalMapSize * verticalMapSize;
         if (totalMapSize < MIN_MAP_SIZE) {
             System.out.println("""
-                    Карта слишком мала, минимальный размер - 20 клеток\s
+                    Карта слишком мала, минимальный размер - 30 клеток\s
                     Но ты все еще можешь насладиться пустой картой ;)\s
                     """);
         }
