@@ -3,30 +3,21 @@ import Actions.Actions;
 import Actions.Motions;
 import Actions.MapFiller;
 import Actions.EntityRestorer;
-import Sprites.EntitySprite;
 import WorldMap.ConsoleRenderer;
 import WorldMap.GridMap;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        GridMap gridMap = new GridMap(7, 7);
+        GridMap gridMap = new GridMap( 10, 10);
         Actions mapFiller = new MapFiller();
-        Actions creatureMotions = new Motions();
-        Actions restorer = new EntityRestorer();
+        List<Actions> actions = List.of(new Motions(), new EntityRestorer());
         ConsoleRenderer consoleRenderer = new ConsoleRenderer();
-        mapFiller.perform(gridMap);
-        consoleRenderer.render(gridMap);
-        System.out.println();
-        Simulation simulation = new Simulation();
-        for (int i = 0; i < 1000; i++) {
-//            creatureMotions.perform(gridMap);
-//            restorer.perform(gridMap);
-//            consoleRenderer.render(gridMap);
-//            System.out.println();
-            simulation.nextTurn();
-        }
-
-        int i = 123;
+        Simulation simulation = new Simulation(gridMap, mapFiller, actions, consoleRenderer);
+        SimulationUX simulationUX = new SimulationUX(simulation);
+        System.out.println(simulationUX.consoleGraphics(0));
+        simulationUX.perform();
     }
 }
