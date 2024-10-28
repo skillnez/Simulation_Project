@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Simulation {
 
-    private final GridMap gridMap = new GridMap( 30, 30);
+    private final GridMap gridMap = new GridMap( 100, 100);
     private final List<Actions> actions = List.of(new Motions(), new EntityRestorer());
     private final ConsoleRenderer consoleRenderer = new ConsoleRenderer();
     private final AtomicBoolean running = new AtomicBoolean(false);

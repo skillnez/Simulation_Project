@@ -2,10 +2,7 @@ package WorldMap;
 
 import Entities.Entity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GridMap implements BaseMap {
@@ -50,17 +47,13 @@ public class GridMap implements BaseMap {
     }
 
     @Override
-    public Coordinates getCoordinates(Entity entity) {
-        try {
-            for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
-                if (entry.getValue().equals(entity)) {
-                    return entry.getKey();
+    public Coordinates getCoordinates(Entity entity) throws NoSuchElementException {
+        for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
+            if (entry.getValue().equals(entity)) {
+                return entry.getKey();
                 }
-            }
-        } catch (Exception e) {
-            System.out.println("Существа по этой координате не обнаружено" + e.getMessage());
         }
-        return null;
+        throw new NoSuchElementException();
     }
 
     @Override
@@ -82,17 +75,12 @@ public class GridMap implements BaseMap {
     }
 
     @Override
-    public Entity getEntity(Coordinates coordinates) {
-        try {
-            for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
-                if (entry.getKey().equals(coordinates)) {
-                    return entry.getValue();
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Существа по этой координате не обнаружено" + e.getMessage());
+    public Entity getEntity(Coordinates coordinates) throws NoSuchElementException {
+        if (!flatMap.containsKey(coordinates)) {
+            throw new NoSuchElementException();
+        } else {
+            return flatMap.get(coordinates);
         }
-        return null;
     }
 
     @Override
@@ -112,7 +100,7 @@ public class GridMap implements BaseMap {
         return new ArrayList<>(flatMap.keySet());
     }
 
-    private boolean isEmpty(Coordinates cell) {
+    public boolean isEmpty(Coordinates cell) {
         return flatMap.get(cell) == null;
     }
 

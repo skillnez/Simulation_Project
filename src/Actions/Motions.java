@@ -15,12 +15,11 @@ import java.util.List;
 import java.util.Set;
 
 public class Motions extends TurnActions{
-
+    Set<Entity> proceededEntities = new HashSet<>();
     @Override
     public void perform(GridMap gridMap) {
-        Set<Entity> proceededEntities = new HashSet<>();
         for (Entity entry : gridMap.getEntitiesList()) {
-            if (!proceededEntities.contains(entry) && gridMap.getCoordinates(entry) != null) {
+            if (!proceededEntities.contains(entry)) {
                 if (entry instanceof Predator || entry instanceof Herbivore ) {
                     Coordinates seeker = gridMap.getCoordinates(entry);
                     List<Coordinates> creaturePath = new PathFinder().findPath(gridMap, seeker);
@@ -29,6 +28,7 @@ public class Motions extends TurnActions{
                 proceededEntities.add(entry);
             }
         }
+        proceededEntities.clear();
     }
 
     private void defineMove(BaseMap baseMap, List<Coordinates> path, Coordinates from, Entity entity) {
@@ -55,6 +55,8 @@ public class Motions extends TurnActions{
             ((Predator) attacker).attack((Herbivore) target);
             if (!((Herbivore) target).isAlive()) {
                 initiateMove(baseMap, path.getLast(), from, attacker);
+                proceededEntities.add(target);
+
             } else if (path.size() != 1) {
                 path.removeLast();
                 initiateMove(baseMap, path.getLast(), from, attacker);

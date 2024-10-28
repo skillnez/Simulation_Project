@@ -68,20 +68,19 @@ public class PathFinder {
     }
 
     private boolean isNeighborValid(Coordinates inWatch, GridMap gridMap, Coordinates start) {
-        return isInBounds(gridMap, inWatch) && !visited.contains(inWatch) && (!isCellOccupied(gridMap, inWatch) || isGoal(gridMap, inWatch, start));
+        return isInBounds(gridMap, inWatch) && !visited.contains(inWatch) && (gridMap.isEmpty(inWatch) || isGoal(gridMap, inWatch, start));
     }
 
     private boolean isInBounds(GridMap gridMap, Coordinates inWatch) {
         return inWatch.getVertical() < gridMap.getVerticalMapSize() && inWatch.getHorizontal() < gridMap.getHorizontalMapSize() && inWatch.getVertical() >= 0 && inWatch.getHorizontal() >= 0;
     }
 
-    private boolean isCellOccupied(BaseMap baseMap, Coordinates inWatch) {
-        return baseMap.getEntity(inWatch) != null;
-    }
-
-    private boolean isGoal(BaseMap baseMap, Coordinates inWatch, Coordinates start) {
-        Entity target = baseMap.getEntity(inWatch);
-        Entity seeker = baseMap.getEntity(start);
-        return (seeker instanceof Predator && target instanceof Herbivore) || (seeker instanceof Herbivore && target instanceof Consumable);
+    private boolean isGoal(GridMap gridMap, Coordinates inWatch, Coordinates start) {
+        if (!gridMap.isEmpty(inWatch)) {
+            Entity target = gridMap.getEntity(inWatch);
+            Entity seeker = gridMap.getEntity(start);
+            return (seeker instanceof Predator && target instanceof Herbivore) || (seeker instanceof Herbivore && target instanceof Consumable);
+        }
+        return false;
     }
 }
