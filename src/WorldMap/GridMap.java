@@ -47,7 +47,7 @@ public class GridMap implements BaseMap {
     }
 
     @Override
-    public Coordinates getCoordinates(Entity entity) throws NoSuchElementException {
+    public Coordinates getCoordinates(Entity entity) {
         for (Map.Entry<Coordinates, Entity> entry : flatMap.entrySet()) {
             if (entry.getValue().equals(entity)) {
                 return entry.getKey();
@@ -75,7 +75,7 @@ public class GridMap implements BaseMap {
     }
 
     @Override
-    public Entity getEntity(Coordinates coordinates) throws NoSuchElementException {
+    public Entity getEntity(Coordinates coordinates) {
         if (!flatMap.containsKey(coordinates)) {
             throw new NoSuchElementException();
         } else {
